@@ -73,8 +73,30 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
 .review{box-shadow:0 0 0 4px rgba(255,207,58,.12) !important}
 
 /* cards */
-.card{transition:transform .35s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
-.card:hover{transform:translateY(-6px);border-color:#3A3424 !important;box-shadow:0 30px 60px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,207,58,.08)}
+/* cards tilt toward the cursor and carry a soft light under it */
+.card{position:relative;transform:perspective(900px) rotateX(calc(var(--ty,0) * -7deg)) rotateY(calc(var(--tx,0) * 8deg)) translateY(var(--lift,0px));transition:transform .25s cubic-bezier(.2,.7,.2,1),border-color .35s,box-shadow .35s}
+.card:hover{--lift:-6px;border-color:#3A3424 !important;box-shadow:0 30px 60px -30px rgba(0,0,0,.9),0 0 0 1px rgba(255,207,58,.08)}
+.card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle 240px at var(--gx,50%) var(--gy,50%),rgba(255,207,58,.09),transparent 70%)}
+.card:hover::before{opacity:1}
+
+/* cursor ring: trails the pointer, swells over anything you can touch */
+.cring{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid rgba(255,207,58,.75);border-radius:50%;pointer-events:none;z-index:50;transform:translate(var(--cx,-200px),var(--cy,-200px)) scale(var(--cs,1));transition:transform .18s cubic-bezier(.2,.7,.2,1),background-color .25s,border-color .25s}
+.hov .cring{--cs:1.8;background-color:rgba(255,207,58,.08);border-color:rgba(255,207,58,.45)}
+@media (hover:none){.cring{display:none}}
+
+/* headline words get "sung" as you pass over them */
+.hw{display:inline-block;transition:color .35s,transform .35s cubic-bezier(.2,.7,.2,1),text-shadow .35s}
+.hw:hover{color:#FFCF3A;transform:translateY(-6px);text-shadow:0 0 30px rgba(255,207,58,.35)}
+em .hw:hover{color:#F3EDE2}
+
+/* small hovers */
+.marquee:hover .track{animation-play-state:paused}
+.track > span{transition:color .25s}
+.track > span:hover{color:#FFCF3A}
+.step{transition:transform .25s cubic-bezier(.2,.7,.2,1)}
+.step:hover{transform:translateX(6px);border-color:rgba(255,207,58,.45) !important;background:rgba(255,207,58,.06) !important}
+.tile{transition:transform .2s cubic-bezier(.2,.7,.2,1)}
+.tile:hover{transform:translateY(-4px) scale(1.04);border-color:#FFCF3A !important}
 .key{animation:press 2.4s ease-in-out infinite}
 @keyframes press{0%,60%,100%{transform:translateY(0);box-shadow:0 6px 0 #8F8A80}68%,78%{transform:translateY(5px);box-shadow:0 1px 0 #8F8A80}}
 .ripple{animation:ripple 2.4s ease-out infinite}
@@ -98,11 +120,12 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
   .rv{animation:rise linear both;animation-timeline:view();animation-range:entry 0% cover 28%}
   .flatten{animation:flat linear both;animation-timeline:view();animation-range:entry 0% cover 45%}
 }
-@keyframes rise{from{opacity:0;transform:translateY(48px)}to{opacity:1;transform:none}}
+@keyframes rise{from{opacity:0;translate:0 48px}to{opacity:1;translate:0 0}}
 @keyframes flat{from{transform:perspective(1400px) rotateX(18deg) scale(.94);opacity:.4}to{transform:perspective(1400px) rotateX(0) scale(1);opacity:1}}
 
-.btn{transition:transform .2s ease,box-shadow .2s ease}
-.btn:hover{transform:translateY(-2px)}
+/* buttons lean toward the cursor (magnetic) */
+.btn{transform:translate(var(--mgx,0px),calc(var(--mgy,0px) + var(--bl,0px)));transition:transform .2s cubic-bezier(.2,.7,.2,1),box-shadow .2s ease}
+.btn:hover{--bl:-2px}
 .gold:hover{box-shadow:0 14px 40px -10px rgba(255,207,58,.55)}
 .btn:focus-visible,.lnk:focus-visible{outline:2px solid #FFCF3A;outline-offset:3px}
 @media (max-width:720px){.navlinks{display:none !important}.tilt{transform:none !important;animation:none}}
@@ -145,7 +168,7 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
     <a href="#features" class="lnk" style="text-decoration: none; color: #B9B3A8">Features</a>
     <a href="https://github.com/overhours/verse" class="lnk" style="text-decoration: none; color: #B9B3A8">GitHub</a>
   </div>
-  <a href="https://github.com/overhours/verse-updates/releases/latest" class="btn" style="text-decoration: none; background: #F3EDE2; color: #141416; font-weight: 600; font-size: 15px; padding: 10px 20px; border-radius: 999px; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center">Download</a>
+  <a href="https://github.com/overhours/verse-updates/releases/latest" class="btn mag" style="text-decoration: none; background: #F3EDE2; color: #141416; font-weight: 600; font-size: 15px; padding: 10px 20px; border-radius: 999px; min-height: 44px; box-sizing: border-box; display: inline-flex; align-items: center">Download</a>
 </div>
 
 <!-- HERO -->
@@ -155,14 +178,14 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
       <span style="position: relative; width: 7px; height: 7px"><span class="ripple" style="position: absolute; inset: -4px; border-radius: 50%; background: rgba(255,207,58,.5)"></span><span style="position: absolute; inset: 0; border-radius: 50%; background: #FFCF3A"></span></span>
       Version 1.0.2 · Free for Windows
     </div>
-    <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(56px, 7vw, 108px); line-height: .9; letter-spacing: -.025em">Every word,<br><em class="glowline" style="color: #FFCF3A">right on time.</em></h1>
+    <h1 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(56px, 7vw, 108px); line-height: .9; letter-spacing: -.025em"><span class="hw">Every</span> <span class="hw">word,</span><br><em class="glowline" style="color: #FFCF3A"><span class="hw">right</span> <span class="hw">on</span> <span class="hw">time.</span></em></h1>
     <p style="margin: 28px 0 40px; font-size: 19px; color: #B9B3A8; max-width: 480px">Paste a Spotify or SoundCloud link, or open your own audio. Verse finds the lyrics, times them to the music, and lights up each word as it's sung.</p>
     <div style="display: flex; flex-wrap: wrap; gap: 12px; align-items: center">
-      <a href="https://github.com/overhours/verse-updates/releases/latest" class="btn gold" style="text-decoration: none; background: #FFCF3A; color: #141416; font-weight: 600; font-size: 16px; padding: 16px 28px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px -12px rgba(255,207,58,.45), inset 0 1px 0 rgba(255,255,255,.4)">
+      <a href="https://github.com/overhours/verse-updates/releases/latest" class="btn mag gold" style="text-decoration: none; background: #FFCF3A; color: #141416; font-weight: 600; font-size: 16px; padding: 16px 28px; border-radius: 999px; display: inline-flex; align-items: center; gap: 10px; box-shadow: 0 10px 30px -12px rgba(255,207,58,.45), inset 0 1px 0 rgba(255,255,255,.4)">
         <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11"></path><path d="m7 10 5 5 5-5"></path><path d="M5 20h14"></path></svg>
         Download for Windows
       </a>
-      <a href="https://github.com/overhours/verse" class="btn" style="text-decoration: none; color: #F3EDE2; font-weight: 500; font-size: 16px; padding: 15px 26px; border-radius: 999px; border: 1px solid #3A3A40; background: rgba(23,23,26,.6)">View source</a>
+      <a href="https://github.com/overhours/verse" class="btn mag" style="text-decoration: none; color: #F3EDE2; font-weight: 500; font-size: 16px; padding: 15px 26px; border-radius: 999px; border: 1px solid #3A3A40; background: rgba(23,23,26,.6)">View source</a>
     </div>
     <p style="margin: 18px 0 0; font-size: 13px; color: #8F8A80">Windows 10 / 11, 64-bit · Updates itself in the background</p>
   </div>
@@ -775,57 +798,57 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
 
         <div style="display: flex; flex-wrap: wrap; gap: 10px">
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">Counting</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:24.10 · 96%</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">cars</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:24.62 · 91%</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #2E2814; border: 1px solid #4A3D14; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #2E2814; border: 1px solid #4A3D14; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #FFCF3A">along</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:24.95 · 74% · heard twice</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">the</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:25.30 · 93%</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">avenue</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:25.48 · 88%</span>
             </div>
           
-            <div class="review" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #1A1A1D; border: 1px solid #FFCF3A; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile review" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #1A1A1D; border: 1px solid #FFCF3A; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">every</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:27.02 · 46% · review</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">song</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:27.40 · 90%</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #1A1A1D; border: 1px dashed #6B675F; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #1A1A1D; border: 1px dashed #6B675F; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #A8A399">[unclear]</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:27.71 · guess: we’d</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">used</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:27.96 · 85%</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">to</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:28.20 · 94%</span>
             </div>
           
-            <div class="" style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
+            <div class="tile " style="display: flex; flex-direction: column; gap: 4px; padding: 10px 14px; border-radius: 10px; background: #232327; border: 1px solid #2C2C31; box-shadow: inset 0 1px 0 rgba(255,255,255,.04)">
               <span style="font-size: 18px; font-weight: 500; color: #F3EDE2">know</span>
               <span style="font-family: 'Geist Mono', monospace; font-size: 11px; color: #A8A399">1:28.35 · 97%</span>
             </div>
@@ -955,7 +978,7 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
     </div>
     <h2 style="margin: 0; font-family: 'Instrument Serif', Georgia, serif; font-weight: 400; font-size: clamp(56px, 7vw, 112px); line-height: .92; letter-spacing: -.025em">Start <em class="glowline" style="color: #FFCF3A">singing.</em></h2>
     <p style="margin: 24px 0 40px; color: #B9B3A8; font-size: 18px">Free for Windows 10 and 11.</p>
-    <a href="https://github.com/overhours/verse-updates/releases/latest" class="btn gold" style="text-decoration: none; background: #FFCF3A; color: #141416; font-weight: 600; font-size: 17px; padding: 18px 34px; border-radius: 999px; box-shadow: 0 14px 40px -14px rgba(255,207,58,.6), inset 0 1px 0 rgba(255,255,255,.4)">Download Verse 1.0.2</a>
+    <a href="https://github.com/overhours/verse-updates/releases/latest" class="btn mag gold" style="text-decoration: none; background: #FFCF3A; color: #141416; font-weight: 600; font-size: 17px; padding: 18px 34px; border-radius: 999px; box-shadow: 0 14px 40px -14px rgba(255,207,58,.6), inset 0 1px 0 rgba(255,255,255,.4)">Download Verse 1.0.2</a>
   </div>
 </div>
 
@@ -965,6 +988,7 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
   <a href="https://github.com/overhours/verse" class="lnk" style="color: #B9B3A8">Source on GitHub</a>
 </div>
 
+<div class="cring" aria-hidden="true"></div>
 </div>
 
 <script>
@@ -982,6 +1006,32 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
         var b = s.getBoundingClientRect();
         s.style.setProperty('--scrub', Math.max(0, Math.min(100, (e.clientX - b.left) / b.width * 100)).toFixed(1) + '%');
       }
+      // cursor ring, and whether it is over something you can touch
+      root.style.setProperty('--cx', e.clientX + 'px');
+      root.style.setProperty('--cy', e.clientY + 'px');
+      var t = e.target && e.target.closest ? e.target : null;
+      root.classList.toggle('hov', !!(t && t.closest('a,button,.card,[data-scrub],.hw,.step,.tile')));
+      // magnetic buttons: pull toward the cursor, spring back on leave
+      var m = t && t.closest('.mag');
+      if (verseMouse.mag && verseMouse.mag !== m) { verseMouse.mag.style.removeProperty('--mgx'); verseMouse.mag.style.removeProperty('--mgy'); }
+      if (m) {
+        var mr = m.getBoundingClientRect();
+        m.style.setProperty('--mgx', ((e.clientX - (mr.left + mr.width / 2)) * 0.3).toFixed(1) + 'px');
+        m.style.setProperty('--mgy', ((e.clientY - (mr.top + mr.height / 2)) * 0.4).toFixed(1) + 'px');
+      }
+      verseMouse.mag = m;
+      // cards: tilt and light follow the cursor
+      var c = t && t.closest('.card');
+      if (verseMouse.card && verseMouse.card !== c) { ['--tx', '--ty'].forEach(function (k) { verseMouse.card.style.removeProperty(k); }); }
+      if (c) {
+        var cr = c.getBoundingClientRect();
+        var fx = (e.clientX - cr.left) / cr.width, fy = (e.clientY - cr.top) / cr.height;
+        c.style.setProperty('--tx', (fx * 2 - 1).toFixed(3));
+        c.style.setProperty('--ty', (fy * 2 - 1).toFixed(3));
+        c.style.setProperty('--gx', (fx * 100).toFixed(1) + '%');
+        c.style.setProperty('--gy', (fy * 100).toFixed(1) + '%');
+      }
+      verseMouse.card = c;
     }
     window.addEventListener('mousemove', verseMouse, { passive: true });
 </script>
