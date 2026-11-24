@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 280 72" fill="none">
+  <defs><clipPath id="sung"><rect x="4" width="33" height="72"/></clipPath></defs>
+  <rect x="4" y="4" width="64" height="64" rx="14" fill="#141416"/>
+  <g transform="translate(4 4)">
+    <path d="M15 17 32 48l17-31" stroke="#F3EDE2" stroke-width="10" stroke-linecap="round" stroke-linejoin="round"/>
+    <path d="M15 17 32 48l17-31" stroke="#FFCF3A" stroke-width="10" stroke-linecap="round" stroke-linejoin="round" clip-path="url(#sung)"/>
+  </g>
+  <text x="84" y="51" fill="#F3EDE2" font-family="'Geist Variable', Geist, 'Segoe UI', Arial, sans-serif" font-size="44" font-weight="700" letter-spacing="-1.6">Verse</text>
+</svg>

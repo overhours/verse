@@ -1,0 +1,92 @@
+{
+  "name": "verse",
+  "productName": "Verse",
+  "version": "1.0.0",
+  "description": "Find, sync and save song lyrics from Spotify, SoundCloud or MP3 files",
+  "main": "dist-electron/main.js",
+  "scripts": {
+    "build": "vite build && tsc -p tsconfig.electron.json",
+    "start": "npm run build && electron .",
+    "typecheck": "tsc --noEmit -p tsconfig.json && tsc --noEmit -p tsconfig.electron.json",
+    "test": "tsc -p tsconfig.electron.json && node --test dist-electron/*.test.js",
+    "dist": "npm run build && electron-builder --win --publish never"
+  },
+  "build": {
+    "appId": "local.verse.app",
+    "asarUnpack": [
+      "node_modules/ffmpeg-static/**",
+      "node_modules/onnxruntime-node/**"
+    ],
+    "files": [
+      "dist/**",
+      "dist-electron/**",
+      "build/icon.png",
+      "!dist-electron/*.test.js",
+      "!**/node_modules/**/*.{map,md,d.ts,d.mts,d.cts}",
+      "!**/node_modules/onnxruntime-node/bin/napi-v6/{darwin,linux}/**",
+      "!**/node_modules/onnxruntime-node/bin/napi-v6/win32/arm64/**"
+    ],
+    "win": {
+      "target": [
+        {
+          "target": "nsis",
+          "arch": [
+            "x64"
+          ]
+        }
+      ],
+      "icon": "build/icon.png"
+    },
+    "directories": {
+      "output": "release"
+    },
+    "compression": "maximum",
+    "electronLanguages": [
+      "en-US"
+    ],
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "shortcutName": "Verse",
+      "artifactName": "Verse-Setup-${version}.${ext}"
+    },
+    "publish": {
+      "provider": "github",
+      "owner": "overhours",
+      "repo": "verse-updates",
+      "releaseType": "release"
+    }
+  },
+  "dependencies": {
+    "@anthropic-ai/sdk": "^1.12.0",
+    "electron-updater": "^6.8.11",
+    "ffmpeg-static": "^5.3.0",
+    "music-metadata": "^12.8.0",
+    "onnxruntime-node": "^1.31.1",
+    "zod": "^4.6.7"
+  },
+  "devDependencies": {
+    "@fontsource-variable/geist": "^5.3.0",
+    "@fontsource-variable/geist-mono": "^5.3.0",
+    "@fontsource/instrument-serif": "^5.3.0",
+    "@tailwindcss/vite": "^4.3.5",
+    "@types/node": "^26.6.6",
+    "@types/react": "^18.3.31",
+    "@types/react-dom": "^18.3.7",
+    "@vitejs/plugin-react": "^6.3.0",
+    "electron": "^45.4.1",
+    "electron-builder": "^26.18.0",
+    "lucide-react": "^1.77.0",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "tailwindcss": "^4.3.5",
+    "typescript": "^7.0.2",
+    "vite": "^8.3.8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/overhours/verse.git"
+  },
+  "author": "overhours"
+}
