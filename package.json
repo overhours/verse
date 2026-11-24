@@ -1,7 +1,7 @@
 {
   "name": "verse",
   "productName": "Verse",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "description": "Find, sync and save song lyrics from Spotify, SoundCloud or MP3 files",
   "main": "dist-electron/main.js",
   "scripts": {

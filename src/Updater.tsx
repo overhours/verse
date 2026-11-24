@@ -12,7 +12,7 @@ function Wave({ big }: { big?: boolean }) {
     <div className={cx('flex items-center', big ? 'h-24 gap-[5px]' : 'h-3.5 gap-[2px]')} aria-hidden>
       {Array.from({ length: bars }, (_, i) => {
         const h = big ? 30 + 70 * Math.sin((i / (bars - 1)) * Math.PI) : 100
-        return <span key={i} className={cx('wave-bar rounded-full bg-accent', big ? 'w-[5px]' : 'w-[2px]')}
+        return <span key={i} className={cx('wave-bar rounded-full', big ? 'w-[5px] bg-accent' : 'w-[2px] bg-current')}
           style={{ height: `${h}%`, animationDelay: `${-(i * (big ? 0.09 : 0.18)) % 1.1}s` }} />
       })}
     </div>
