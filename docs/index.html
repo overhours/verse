@@ -79,6 +79,16 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
 .card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle 240px at var(--gx,50%) var(--gy,50%),rgba(255,207,58,.09),transparent 70%)}
 .card:hover::before{opacity:1}
 
+/* click: rings spread out from the pointer like a sound wave */
+.rip{position:fixed;left:-999px;top:0;width:0;height:0;pointer-events:none;z-index:60}
+.rip span{position:absolute;left:-70px;top:-70px;width:140px;height:140px;border-radius:50%;border:2px solid rgba(255,207,58,.8);opacity:0;transform:scale(.05)}
+.rip span:nth-child(2){border-width:1.5px;border-color:rgba(255,207,58,.5)}
+.rip span:nth-child(3){border-width:1px;border-color:rgba(243,237,226,.35)}
+.rip.go span{animation:wave .95s cubic-bezier(.15,.7,.3,1) forwards}
+.rip.go span:nth-child(2){animation-delay:.11s}
+.rip.go span:nth-child(3){animation-delay:.22s}
+@keyframes wave{0%{transform:scale(.05);opacity:1}100%{transform:scale(2.3);opacity:0}}
+
 /* headline words get "sung" as you pass over them */
 .hw{display:inline-block;transition:color .35s,transform .35s cubic-bezier(.2,.7,.2,1),text-shadow .35s}
 .hw:hover{color:#FFCF3A;transform:translateY(-6px);text-shadow:0 0 30px rgba(255,207,58,.35)}
@@ -983,6 +993,10 @@ em .hw:hover{color:#F3EDE2}
   <a href="https://github.com/overhours/verse" class="lnk" style="color: #B9B3A8">Source on GitHub</a>
 </div>
 
+<div class="rip" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="rip" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="rip" aria-hidden="true"><span></span><span></span><span></span></div>
+<div class="rip" aria-hidden="true"><span></span><span></span><span></span></div>
 </div>
 
 <script>
@@ -1023,7 +1037,20 @@ em .hw:hover{color:#F3EDE2}
       }
       verseMouse.card = c;
     }
+    // click/tap: replay the next of four pre-made ripple elements at the pointer
+    function verseClick(e) {
+      var rs = document.querySelectorAll('.rip');
+      if (!rs.length) return;
+      verseClick.n = ((verseClick.n || 0) + 1) % rs.length;
+      var r = rs[verseClick.n];
+      r.classList.remove('go');
+      void r.offsetWidth; // restart the animation
+      r.style.left = e.clientX + 'px';
+      r.style.top = e.clientY + 'px';
+      r.classList.add('go');
+    }
     window.addEventListener('mousemove', verseMouse, { passive: true });
+window.addEventListener('pointerdown', verseClick, { passive: true });
 </script>
 </body>
 </html>
