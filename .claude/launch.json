@@ -1,6 +1,7 @@
 {
   "version": "0.0.1",
   "configurations": [
-    { "name": "verse-ui", "runtimeExecutable": "npx", "runtimeArgs": ["vite", "preview", "--port", "4173", "--strictPort"], "port": 4173 }
+    { "name": "verse-ui", "runtimeExecutable": "npx", "runtimeArgs": ["vite", "preview", "--port", "4173", "--strictPort"], "port": 4173 },
+    { "name": "verse-site", "runtimeExecutable": "python", "runtimeArgs": ["-m", "http.server", "4180", "-d", "docs"], "port": 4180 }
   ]
 }
