@@ -79,11 +79,6 @@ a{color:#F3EDE2}a:hover{color:#FFCF3A}
 .card::before{content:"";position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;background:radial-gradient(circle 240px at var(--gx,50%) var(--gy,50%),rgba(255,207,58,.09),transparent 70%)}
 .card:hover::before{opacity:1}
 
-/* cursor ring: trails the pointer, swells over anything you can touch */
-.cring{position:fixed;left:0;top:0;width:34px;height:34px;margin:-17px 0 0 -17px;border:1.5px solid rgba(255,207,58,.75);border-radius:50%;pointer-events:none;z-index:50;transform:translate(var(--cx,-200px),var(--cy,-200px)) scale(var(--cs,1));transition:transform .18s cubic-bezier(.2,.7,.2,1),background-color .25s,border-color .25s}
-.hov .cring{--cs:1.8;background-color:rgba(255,207,58,.08);border-color:rgba(255,207,58,.45)}
-@media (hover:none){.cring{display:none}}
-
 /* headline words get "sung" as you pass over them */
 .hw{display:inline-block;transition:color .35s,transform .35s cubic-bezier(.2,.7,.2,1),text-shadow .35s}
 .hw:hover{color:#FFCF3A;transform:translateY(-6px);text-shadow:0 0 30px rgba(255,207,58,.35)}
@@ -988,7 +983,6 @@ em .hw:hover{color:#F3EDE2}
   <a href="https://github.com/overhours/verse" class="lnk" style="color: #B9B3A8">Source on GitHub</a>
 </div>
 
-<div class="cring" aria-hidden="true"></div>
 </div>
 
 <script>
@@ -1006,11 +1000,7 @@ em .hw:hover{color:#F3EDE2}
         var b = s.getBoundingClientRect();
         s.style.setProperty('--scrub', Math.max(0, Math.min(100, (e.clientX - b.left) / b.width * 100)).toFixed(1) + '%');
       }
-      // cursor ring, and whether it is over something you can touch
-      root.style.setProperty('--cx', e.clientX + 'px');
-      root.style.setProperty('--cy', e.clientY + 'px');
       var t = e.target && e.target.closest ? e.target : null;
-      root.classList.toggle('hov', !!(t && t.closest('a,button,.card,[data-scrub],.hw,.step,.tile')));
       // magnetic buttons: pull toward the cursor, spring back on leave
       var m = t && t.closest('.mag');
       if (verseMouse.mag && verseMouse.mag !== m) { verseMouse.mag.style.removeProperty('--mgx'); verseMouse.mag.style.removeProperty('--mgy'); }
